@@ -49,7 +49,13 @@ def main():
         return 1
     out = destination()
     out.mkdir(parents=True, exist_ok=True)
-    (out / "entry.txt").write_text(ENTRY_TEXT, encoding="utf-8")
+    target = out / "entry.txt"
+    target.write_text(ENTRY_TEXT, encoding="utf-8")
+    # Read it back: the grader's gate counts what is on disk, so the
+    # run is only a success if the file holds exactly the entry text.
+    if target.read_text(encoding="utf-8") != ENTRY_TEXT:
+        print("main.py: entry.txt does not hold the entry text", file=sys.stderr)
+        return 1
     return 0
 
 
